@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checking Bot Mini App</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!-- AdSpark K=8 - তোমার Main SDK -->
+<script src="https://adspark-tma.top/api/public/sdk.js?k=8"></script>
+<script src="https://adspark-tma.top/api/public/sdk.js?k=64"></script>
+<script src="https://adspark-tma.top/api/public/sdk.js?k=34"></script>
+<style>
+body{margin:0;background:#0f0f0f;color:#fff;font-family:system-ui;padding:16px;text-align:center}
+.card{background:#1e1e1e;padding:20px;border-radius:16px;border:1px solid #333;margin-top:20px}
+button{width:100%;padding:18px;border:0;border-radius:12px;font-size:18px;font-weight:900;margin-top:12px;cursor:pointer}
+.b1{background:#00d084;color:#000}
+.b2{background:#ffcc00;color:#000}
+.log{background:#000;color:#0f0;padding:10px;border-radius:8px;margin-top:15px;text-align:left;font-size:12px;height:120px;overflow:auto}
+</style>
+</head>
+<body>
+<h2>🤖 Checking Bot</h2>
+<p id="uid" style="opacity:.6">Checking Telegram...</p>
+
+<div class="card">
+<button class="b1" onclick="watchAd()">🎬 Ad দেখো - K=8 (Main)</button>
+<button class="b2" onclick="watchMonetag()">💰 Monetag Ad দেখো</button>
+<div class="log" id="log">Log...</div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+const logEl = document.getElementById('log');
+function log(m){ logEl.innerHTML += m + "\n"; console.log(m); }
+
+if(tg){
+  tg.ready(); tg.expand();
+  const userId = tg.initDataUnsafe?.user?.id;
+  document.getElementById('uid').innerText = "User ID: " + userId + " | Bot Connected ✅";
+  log("✅ Bot Token OK | WebApp Ready | UserID: " + userId);
+} else {
+  log("❌ Telegram এর বাইরে ওপেন করছো");
+}
+
+function watchAd(){
+  const userId = tg?.initDataUnsafe?.user?.id;
+  if(!userId){ alert("Bot এর ভিতর থেকে ওপেন করো ভাই"); return; }
+  if(typeof showAdspark !== 'function'){ log("❌ showAdspark not found - k=8 Approve হয়নি"); return; }
+  log("Calling AdSpark K=8...");
+  showAdspark({ ymid: userId }).then(()=>{
+    log("✅ AdSpark Ad Complete! Reward দাও");
+    alert("সাবাস! AdSpark থেকে Ad আসছে! K=8 100% OK");
+  }).catch(e=>{
+    log("⚠️ No Ad for now: " + e);
+    alert("এখন Ad নাই, কিন্তু SDK ঠিক আছে।");
+  });
+}
+
+function watchMonetag(){
+  if(typeof show_10483352 === 'function'){
+    show_10483352().then(()=>{ log("✅ Monetag Ad Complete"); alert("Monetag OK!"); })
+    .catch(e=>{ log("Monetag Fail: "+e); });
+  } else {
+    log("❌ Monetag function not found");
+  }
+}
+</script>
+
+<script src="//libtl.com/sdk.js" data-zone="10483352" data-sdk="show_10483352"></script>
+</body>
+</html>
