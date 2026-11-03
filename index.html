@@ -2,70 +2,112 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checking Bot Mini App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Check Bot - Final Ads</title>
+<!-- Telegram WebApp -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<!-- AdSpark K=8 - তোমার Main SDK -->
-<script src="https://adspark-tma.top/api/public/sdk.js?k=8"></script>
-<script src="https://adspark-tma.top/api/public/sdk.js?k=64"></script>
+<!-- তোমার ২ টা SDK - একদম সঠিক ভাবে বসানো -->
+<!-- SDK 1: AdSpark K=34 -->
 <script src="https://adspark-tma.top/api/public/sdk.js?k=34"></script>
+
 <style>
-body{margin:0;background:#0f0f0f;color:#fff;font-family:system-ui;padding:16px;text-align:center}
-.card{background:#1e1e1e;padding:20px;border-radius:16px;border:1px solid #333;margin-top:20px}
-button{width:100%;padding:18px;border:0;border-radius:12px;font-size:18px;font-weight:900;margin-top:12px;cursor:pointer}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui;background:#0a0a0a;color:#fff;padding:0}
+.header{background:linear-gradient(135deg,#00d084,#2e90ff);padding:20px;text-align:center;color:#000}
+.header h2{margin:0}
+.card{background:#1e1e1e;margin:16px;padding:20px;border-radius:16px;border:1px solid #333}
+button{width:100%;padding:18px;border:0;border-radius:12px;font-size:18px;font-weight:900;margin-top:12px;cursor:pointer;transition:.2s}
+button:active{transform:scale(.97)}
 .b1{background:#00d084;color:#000}
 .b2{background:#ffcc00;color:#000}
-.log{background:#000;color:#0f0;padding:10px;border-radius:8px;margin-top:15px;text-align:left;font-size:12px;height:120px;overflow:auto}
+.log{background:#000;color:#0f0;padding:12px;border-radius:10px;margin-top:15px;text-align:left;font-size:12px;height:150px;overflow:auto;border:1px solid #222;white-space:pre-wrap}
+.uid{font-size:12px;opacity:.6;margin-top:8px}
 </style>
 </head>
 <body>
-<h2>🤖 Checking Bot</h2>
-<p id="uid" style="opacity:.6">Checking Telegram...</p>
+
+<div class="header">
+  <h2>🚀 Checking Bot - Final</h2>
+  <div class="uid" id="uid">Loading...</div>
+</div>
 
 <div class="card">
-<button class="b1" onclick="watchAd()">🎬 Ad দেখো - K=8 (Main)</button>
-<button class="b2" onclick="watchMonetag()">💰 Monetag Ad দেখো</button>
-<div class="log" id="log">Log...</div>
+  <h3 style="margin:0 0 10px 0">তোমার ২ টা SDK Ready ✅</h3>
+  <button class="b1" onclick="watchAdSpark()">🎬 AdSpark K=34 - Ad দেখো</button>
+  <button class="b2" onclick="watchMonetag()">💰 Monetag LibTL - Ad দেখো</button>
+  <div class="log" id="log">Log starting...
+Bot লিংক: https://xnoyon999.github.io/Check-/
+</div>
 </div>
 
 <script>
 const tg = window.Telegram?.WebApp;
 const logEl = document.getElementById('log');
-function log(m){ logEl.innerHTML += m + "\n"; console.log(m); }
+function log(m){ logEl.innerHTML += "["+new Date().toLocaleTimeString()+"] "+m+"\n"; logEl.scrollTop=logEl.scrollHeight; console.log(m); }
 
+let userId = null;
 if(tg){
   tg.ready(); tg.expand();
-  const userId = tg.initDataUnsafe?.user?.id;
-  document.getElementById('uid').innerText = "User ID: " + userId + " | Bot Connected ✅";
-  log("✅ Bot Token OK | WebApp Ready | UserID: " + userId);
+  userId = tg.initDataUnsafe?.user?.id;
+  document.getElementById('uid').innerHTML = "✅ Telegram Connected | User ID: " + (userId || "Not Found") + "<br>Site: xnoyon999.github.io/Check-/";
+  log("✅ Bot Connected! User ID: " + userId);
+  log("✅ AdSpark K=34 Loaded: " + (typeof showAdspark === 'function' ? "OK" : "FAIL"));
+  log("✅ Monetag LibTL Loaded: " + (typeof show_10483352 === 'function' ? "Checking..." : "Loading..."));
 } else {
-  log("❌ Telegram এর বাইরে ওপেন করছো");
+  log("❌ Telegram এর বাইরে ওপেন করছো - Bot থেকে ওপেন করো");
 }
 
-function watchAd(){
-  const userId = tg?.initDataUnsafe?.user?.id;
-  if(!userId){ alert("Bot এর ভিতর থেকে ওপেন করো ভাই"); return; }
-  if(typeof showAdspark !== 'function'){ log("❌ showAdspark not found - k=8 Approve হয়নি"); return; }
-  log("Calling AdSpark K=8...");
-  showAdspark({ ymid: userId }).then(()=>{
-    log("✅ AdSpark Ad Complete! Reward দাও");
-    alert("সাবাস! AdSpark থেকে Ad আসছে! K=8 100% OK");
-  }).catch(e=>{
-    log("⚠️ No Ad for now: " + e);
-    alert("এখন Ad নাই, কিন্তু SDK ঠিক আছে।");
-  });
+function watchAdSpark(){
+  log("--- AdSpark K=34 Clicked ---");
+  if(!tg || !userId){
+    log("FAIL: Telegram থেকে ওপেন করতে হবে");
+    alert("ভাই Bot এর ভিতর থেকে Play বাটনে ক্লিক করে ওপেন করো");
+    return;
+  }
+  if(typeof showAdspark !== 'function'){
+    log("FAIL: showAdspark() পাওয়া যায়নি - Dashboard এ K=34 Approved কিনা চেক করো");
+    alert("K=34 Approve হয়নি বা Invalid");
+    return;
+  }
+  log("Calling showAdspark({ymid:"+userId+"})");
+  showAdspark({ ymid: userId })
+    .then(()=>{
+      log("✅ SUCCESS: K=34 Ad Complete - Reward দাও");
+      alert("সাবাস ভাই! K=34 থেকে Ad আসছে! 100% OK");
+    })
+    .catch(e=>{
+      log("⚠️ No Ad Right Now: "+e+" - SDK ঠিক আছে");
+      alert("এখন Ad নাই, কিন্তু SDK ঠিক আছে। একটু পরে Try করো");
+    });
 }
 
 function watchMonetag(){
+  log("--- Monetag Clicked ---");
   if(typeof show_10483352 === 'function'){
-    show_10483352().then(()=>{ log("✅ Monetag Ad Complete"); alert("Monetag OK!"); })
-    .catch(e=>{ log("Monetag Fail: "+e); });
+    log("Calling show_10483352()...");
+    show_10483352().then(()=>{
+      log("✅ SUCCESS: Monetag Ad Complete!");
+      alert("Monetag থেকে Ad আসছে! 100% OK");
+    }).catch(e=>{
+      log("FAIL Monetag: "+e);
+      alert("Monetag Ad Fail: "+e);
+    });
   } else {
-    log("❌ Monetag function not found");
+    log("FAIL: Monetag function not found - AdBlock বন্ধ করো");
+    alert("AdBlock বন্ধ করো ভাই");
   }
 }
+
+// Monetag চেক করার জন্য 2 সেকেন্ড পরে
+setTimeout(()=>{
+  if(typeof show_10483352 === 'function'){
+    log("✅ Monetag Ready: show_10483352() FOUND");
+  }
+}, 2000);
 </script>
 
+<!-- Monetag SDK - সবসময় body এর শেষে -->
 <script src="//libtl.com/sdk.js" data-zone="10483352" data-sdk="show_10483352"></script>
+
 </body>
 </html>
